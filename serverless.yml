@@ -6,6 +6,9 @@ provider:
   region: us-east-1
 plugins:
   - serverless-offline
+package:
+  include:
+  - lib/**
 
 functions:
   speak:
