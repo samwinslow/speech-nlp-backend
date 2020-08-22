@@ -18,3 +18,10 @@ functions:
         path: speak
         method: post
         cors: true
+  processTemp:
+    handler: handler.processTemp
+    events:
+    - http:
+        path: process
+        method: post
+        cors: true

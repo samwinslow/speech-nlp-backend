@@ -4,6 +4,7 @@ let AWS = require("aws-sdk")
 let polly = new AWS.Polly()
 let s3 = new AWS.S3()
 const { v1: uuidv1 } = require('uuid')
+let fs = require('fs')
 
 
 module.exports.speak = (event, context, callback) => {
@@ -64,4 +65,36 @@ module.exports.speak = (event, context, callback) => {
       })
     })
     .send()
+}
+
+module.exports.processTemp = (event, context, callback) => {
+  try {
+    let data = event.body // Would actually take uploaded PDF and move it to S3. Let's assume input is already processed.
+    let arr = data.split('\n')
+    let newArr = arr.map(line => {
+      let len = line.length
+      if (line.replace(/([a-z]|\ )/g, '').length > 0.5 * len) return ''
+      if (line.replace(/[0-9]/g, '').length < 0.9 * len) return ''
+      if (line.replace(/[A-Za-z0-9\ ]/g, '').length > 0.1 * len) return ''
+      // return line.match(/^[\d+\ ]/g) // TODO (if starts with digit and space)
+      return line
+    })
+
+    callback(null, {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin" : "*"
+      },
+      body: newArr.join('\n')
+    })
+  } catch(err) {
+    console.error(err)
+    callback(null, {
+      statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin" : "*"
+      },
+      body: JSON.stringify(err)
+    })
+  }
 }
