@@ -6,3 +6,6 @@ yarn.lock
 
 # Serverless directories
 .serverless
+
+# AWS keys, etc
+secrets.json

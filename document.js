@@ -8,7 +8,7 @@ module.exports.create = (event, context, callback) {
   const data = JSON.parse(event.body)
 
   const params = {
-    TableName: process.env.tableName,
+    TableName: process.env.NOSQL_TABLE_NAME,
     // 'Item' contains the attributes of the item to be created
     // - 'userId': user identities are federated through the
     //             Cognito Identity Pool, we will use the identity id

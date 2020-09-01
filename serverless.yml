@@ -1,9 +1,17 @@
 service: speech-nlp-backend
+
+custom:
+  secrets: ${file(./secrets.json)}
+  authorizer:
+    name: authorizer
+    arn: ${self:custom.secrets.COGNITO_ARN}
 provider:
   name: aws
   runtime: nodejs12.x
   stage: dev
   region: us-east-1
+  environment:
+    NOSQL_TABLE_NAME: ${self:custom.secrets.NOSQL_TABLE_NAME}
 plugins:
   - serverless-offline
 package:
@@ -25,3 +33,12 @@ functions:
         path: process
         method: post
         cors: true
+  createDocument:
+    handler: document.create
+    events:
+    - http:
+        path: /doc/create
+        method: post
+        cors: true
+        authorizer: ${self:custom.authorizer}
+        
