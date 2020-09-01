@@ -69,23 +69,42 @@ module.exports.speak = (event, context, callback) => {
 
 module.exports.processTemp = (event, context, callback) => {
   try {
-    let data = event.body // Would actually take uploaded PDF and move it to S3. Let's assume input is already processed.
+    let data = event.body.toString() // Would actually take uploaded PDF and move it to S3. Let's assume input is already processed.
     let arr = data.split('\n')
-    let newArr = arr.map(line => {
+    let newArr = []
+    var result = ''
+    arr = arr.map(line => {
       let len = line.length
       if (line.replace(/([a-z]|\ )/g, '').length > 0.5 * len) return ''
       if (line.replace(/[0-9]/g, '').length < 0.9 * len) return ''
       if (line.replace(/[A-Za-z0-9\ ]/g, '').length > 0.1 * len) return ''
-      // return line.match(/^[\d+\ ]/g) // TODO (if starts with digit and space)
-      return line
+      if (line.match(/^(\[\d+\])/)) return ''
+      line.replace
+      return line.replace(/(\s*\[\d+\]\s*)/g,'')
     })
+    arr.forEach(line => {
+      if (line) newArr.push(line)
+    })
+    for (var i = 0; i < newArr.length; i++) {
+      let line = newArr[i]
+      if (i === 0) {
+        result = line
+        continue
+      }
+      let prevLine = newArr[i-1]
+      if ((prevLine.match(/[\.\!\?]$/) && line.match(/^[A-Z0-9]/))) {
+        result += '\n' + line
+      } else {
+        result += ' ' + line
+      }
+    }
 
     callback(null, {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin" : "*"
       },
-      body: newArr.join('\n')
+      body: result
     })
   } catch(err) {
     console.error(err)
