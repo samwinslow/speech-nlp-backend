@@ -81,7 +81,8 @@ export function getAll(event, context, callback) {
     KeyConditionExpression: 'userId = :userId',
     ExpressionAttributeValues: {
       ':userId': event.requestContext.authorizer.claims.sub
-    }
+    },
+    ProjectionExpression: 'createdAt, noteId, userId, title'
   }
 
   dynamoDb.query(params, (error, data) => {
