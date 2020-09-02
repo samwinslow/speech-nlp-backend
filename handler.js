@@ -1,5 +1,3 @@
-'use strict'
-
 let AWS = require("aws-sdk")
 let polly = new AWS.Polly()
 let s3 = new AWS.S3()
@@ -20,7 +18,7 @@ module.exports.speak = (event, context, callback) => {
       let data = response.data
       let audioStream = data.AudioStream
       let key = uuidv1()
-      let s3BucketName = 'speech-nlp-backend'  
+      let s3BucketName = 'speech-nlp-backend'
       let params = {
         Bucket: s3BucketName,
         Key: key + '.mp3',
@@ -91,7 +89,7 @@ module.exports.processTemp = (event, context, callback) => {
         result = line
         continue
       }
-      let prevLine = newArr[i-1]
+      let prevLine = newArr[i - 1]
       if ((prevLine.match(/[\.\!\?]$/) && line.match(/^[A-Z0-9]/))) {
         result += '\n' + line
       } else {
@@ -106,7 +104,7 @@ module.exports.processTemp = (event, context, callback) => {
       },
       body: result
     })
-  } catch(err) {
+  } catch (err) {
     console.error(err)
     callback(null, {
       statusCode: 500,

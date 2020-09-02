@@ -14,6 +14,7 @@ provider:
     NOSQL_TABLE_NAME: ${self:custom.secrets.NOSQL_TABLE_NAME}
 plugins:
   - serverless-offline
+  - serverless-bundle
 package:
   include:
   - lib/**
@@ -37,8 +38,8 @@ functions:
     handler: document.create
     events:
     - http:
-        path: /doc/create
+        path: /doc
         method: post
-        cors: true
         authorizer: ${self:custom.authorizer}
-        
+        cors: true
+
