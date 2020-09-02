@@ -25,6 +25,7 @@ export function create(event, context, callback) {
       userId: event.requestContext.authorizer.claims.sub,
       noteId: uuid.v1(),
       content: data.content,
+      title: data.title,
       createdAt: Date.now()
     }
   }
@@ -109,11 +110,12 @@ export function update(event, context, callback) {
       userId: event.requestContext.authorizer.claims.sub,
       noteId: event.pathParameters.id,
     },
-    UpdateExpression: "SET content = :content",
+    UpdateExpression: 'SET content = :content, title = :title',
     ExpressionAttributeValues: {
-      ":content": data.content || null
+      ':content': data.content || null,
+      ':title': data.title || null,
     },
-    ReturnValues: "ALL_NEW"
+    ReturnValues: 'ALL_NEW'
   }
 
   dynamoDb.update(params, (error, data) => {
