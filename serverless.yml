@@ -12,6 +12,16 @@ provider:
   region: us-east-1
   environment:
     NOSQL_TABLE_NAME: ${self:custom.secrets.NOSQL_TABLE_NAME}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+       - dynamodb:Query
+       - dynamodb:Scan
+       - dynamodb:GetItem
+       - dynamodb:PutItem
+       - dynamodb:UpdateItem
+       - dynamodb:DeleteItem
+      Resource: ${self:custom.secrets.NOSQL_ARN}
 plugins:
   - serverless-offline
   - serverless-bundle
@@ -42,4 +52,36 @@ functions:
         method: post
         authorizer: ${self:custom.authorizer}
         cors: true
+  getDocument:
+    handler: document.get
+    events:
+    - http:
+        path: /doc/{id}
+        method: get
+        authorizer: ${self:custom.authorizer}
+        cors: true
+  # getDocuments:
+  #   handler: document.getAll
+  #   events:
+  #   - http:
+  #       path: /docs
+  #       method: get
+  #       authorizer: ${self:custom.authorizer}
+  #       cors: true
+  # updateDocument:
+  #   handler: document.update
+  #   events:
+  #   - http:
+  #       path: /doc
+  #       method: put
+  #       authorizer: ${self:custom.authorizer}
+  #       cors: true
+  # deleteDocument:
+  #   handler: document.delete
+  #   events:
+  #   - http:
+  #       path: /doc
+  #       method: delete
+  #       authorizer: ${self:custom.authorizer}
+  #       cors: true
 
