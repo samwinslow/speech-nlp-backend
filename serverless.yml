@@ -60,22 +60,22 @@ functions:
         method: get
         authorizer: ${self:custom.authorizer}
         cors: true
-  # getDocuments:
-  #   handler: document.getAll
-  #   events:
-  #   - http:
-  #       path: /docs
-  #       method: get
-  #       authorizer: ${self:custom.authorizer}
-  #       cors: true
-  # updateDocument:
-  #   handler: document.update
-  #   events:
-  #   - http:
-  #       path: /doc
-  #       method: put
-  #       authorizer: ${self:custom.authorizer}
-  #       cors: true
+  getDocuments:
+    handler: document.getAll
+    events:
+    - http:
+        path: /docs
+        method: get
+        authorizer: ${self:custom.authorizer}
+        cors: true
+  updateDocument:
+    handler: document.update
+    events:
+    - http:
+        path: /doc/{id}
+        method: put
+        authorizer: ${self:custom.authorizer}
+        cors: true
   # deleteDocument:
   #   handler: document.delete
   #   events:
