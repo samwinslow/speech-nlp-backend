@@ -132,3 +132,31 @@ export function update(event, context, callback) {
     return callback(null, response)
   })
 }
+
+export function remove(event, context, callback) {
+  // Gets document content for specified key.
+  const data = JSON.parse(event.body)
+  const params = {
+    TableName: process.env.NOSQL_TABLE_NAME,
+    Key: {
+      userId: event.requestContext.authorizer.claims.sub,
+      noteId: event.pathParameters.id,
+    }
+  }
+
+  dynamoDb.delete(params, (error, data) => {
+    // Error
+    if (error) {
+      const response = HTTPError(error)
+      callback(null, response)
+      return
+    }
+    // Success
+    const response = {
+      statusCode: 200,
+      headers: headers,
+      body: JSON.stringify({ status: true })
+    }
+    return callback(null, response)
+  })
+}

@@ -76,12 +76,12 @@ functions:
         method: put
         authorizer: ${self:custom.authorizer}
         cors: true
-  # deleteDocument:
-  #   handler: document.delete
-  #   events:
-  #   - http:
-  #       path: /doc
-  #       method: delete
-  #       authorizer: ${self:custom.authorizer}
-  #       cors: true
+  deleteDocument:
+    handler: document.remove
+    events:
+    - http:
+        path: /doc/{id}
+        method: delete
+        authorizer: ${self:custom.authorizer}
+        cors: true
 
